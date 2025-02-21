@@ -19,10 +19,10 @@ int zzz(int result)
         current_sym++;
         return zzz(res);
     }
-    //printf ("first = %d, ", res);test
-    //printf ("operation = %d ", operation); test
+    //printf ("first = %d, ", res);//test
+    //printf ("operation = %d ", operation); //test
     int second = values[current_val];
-    //printf (",second = %d ", second);test
+    //printf (",second = %d ", second);//test
     current_val ++;
     if (operation == ')')
     {
@@ -85,12 +85,14 @@ int main()
                 {
                     values[val] = values[val] * 10 + (buffer[j] - '0');
                     j++;
-                    i = j;
+                    i = j - 1;
                 }
+                //printf("values[%d] = %d\n", val, values[val]); //tests
                 val++;
             } 
             else if (buffer[i] >= 40 && buffer[i] <= 47 && buffer[i] != 44 && buffer[i] != 46)
             {
+                //printf("symbols[%d] = %d\n", sym, buffer[i]); //tests
                 symbols[sym] = buffer[i];
                 sym++;
             }
@@ -102,7 +104,7 @@ int main()
     while (current_sym < sym && current_val < val)
     {
         result = zzz(result);
-        //printf(", result = %d\n", result); tests
+        //printf(", result = %d\n", result); //tests
     }
     printf("%d", result);
     return 0;
