@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
 #include "../../src/main.h"
+#include <gtest/gtest.h>
 
-extern "C" 
+extern "C"
 {
     void parser(char buffer[65536], size_t len);
 }
@@ -15,50 +15,49 @@ void reset()
     symbols[SIZE] = {0};
 }
 
-char str[4*SIZE + 1];
+char str[4 * SIZE + 1];
 TEST(ParserTests, goodTests)
 {
     reset();
     strcpy(str, "11+4-5\n");
     EXPECT_NO_FATAL_FAILURE(parser(str, strlen(str)));
-    EXPECT_EQ(values[0],11);
-    EXPECT_EQ(values[1],4);
-    EXPECT_EQ(values[2],5);
-    EXPECT_EQ(symbols[0],'+');
-    EXPECT_EQ(symbols[1],'-');
+    EXPECT_EQ(values[0], 11);
+    EXPECT_EQ(values[1], 4);
+    EXPECT_EQ(values[2], 5);
+    EXPECT_EQ(symbols[0], '+');
+    EXPECT_EQ(symbols[1], '-');
 
     reset();
     strcpy(str, "11/4*5\n");
     EXPECT_NO_FATAL_FAILURE(parser(str, strlen(str)));
-    EXPECT_EQ(values[0],11);
-    EXPECT_EQ(values[1],4);
-    EXPECT_EQ(values[2],5);
-    EXPECT_EQ(symbols[0],'/');
-    EXPECT_EQ(symbols[1],'*');
+    EXPECT_EQ(values[0], 11);
+    EXPECT_EQ(values[1], 4);
+    EXPECT_EQ(values[2], 5);
+    EXPECT_EQ(symbols[0], '/');
+    EXPECT_EQ(symbols[1], '*');
 
     reset();
     strcpy(str, "11+(4*5)\n");
     EXPECT_NO_FATAL_FAILURE(parser(str, strlen(str)));
-    EXPECT_EQ(values[0],11);
-    EXPECT_EQ(values[1],4);
-    EXPECT_EQ(values[2],5);
-    EXPECT_EQ(symbols[0],'+');
-    EXPECT_EQ(symbols[1],'(');
-    EXPECT_EQ(symbols[2],'*');
-    EXPECT_EQ(symbols[3],')');
+    EXPECT_EQ(values[0], 11);
+    EXPECT_EQ(values[1], 4);
+    EXPECT_EQ(values[2], 5);
+    EXPECT_EQ(symbols[0], '+');
+    EXPECT_EQ(symbols[1], '(');
+    EXPECT_EQ(symbols[2], '*');
+    EXPECT_EQ(symbols[3], ')');
 
     reset();
     strcpy(str, "11+(4)*5\n");
     EXPECT_NO_FATAL_FAILURE(parser(str, strlen(str)));
-    EXPECT_EQ(values[0],11);
-    EXPECT_EQ(values[1],4);
-    EXPECT_EQ(values[2],5);
-    EXPECT_EQ(symbols[0],'+');
-    EXPECT_EQ(symbols[1],'(');
-    EXPECT_EQ(symbols[2],')');
-    EXPECT_EQ(symbols[3],'*');
+    EXPECT_EQ(values[0], 11);
+    EXPECT_EQ(values[1], 4);
+    EXPECT_EQ(values[2], 5);
+    EXPECT_EQ(symbols[0], '+');
+    EXPECT_EQ(symbols[1], '(');
+    EXPECT_EQ(symbols[2], ')');
+    EXPECT_EQ(symbols[3], '*');
 }
-
 
 TEST(ParserTests, badTests)
 {

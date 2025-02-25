@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
 #include "../../src/main.h"
+#include <gtest/gtest.h>
 
-extern "C" 
+extern "C"
 {
     double zzz(double result);
 }
@@ -23,32 +23,37 @@ int v[SIZE] = {0};
 char s[SIZE] = {0};
 TEST(zzzTests, goodTests)
 {
-    v[0] = 11; v[1] = 3;
+    v[0] = 11;
+    v[1] = 3;
     s[0] = '*';
-    setGlobals(v,s,3,2,0);
-    EXPECT_EQ(zzz(11),33);
+    setGlobals(v, s, 3, 2, 0);
+    EXPECT_EQ(zzz(11), 33);
 
-    s[0] = '('; s[1] = '+'; s[2] = ')';
-    setGlobals(v,s,3,3,0);
-    EXPECT_EQ(zzz(11),14);
+    s[0] = '(';
+    s[1] = '+';
+    s[2] = ')';
+    setGlobals(v, s, 3, 3, 0);
+    EXPECT_EQ(zzz(11), 14);
 
     v[1] = 4;
     s[0] = '/';
-    setGlobals(v,s,3,1,0);
-    EXPECT_EQ(zzz(11),2);
+    setGlobals(v, s, 3, 1, 0);
+    EXPECT_EQ(zzz(11), 2);
 
-    setGlobals(v,s,3,1,1);
-    EXPECT_EQ(zzz(11),2.75);
+    setGlobals(v, s, 3, 1, 1);
+    EXPECT_EQ(zzz(11), 2.75);
 }
 
 TEST(zzzTests, badTests)
 {
-    v[0] = 11; v[1] = 0;
+    v[0] = 11;
+    v[1] = 0;
     s[0] = '/';
-    setGlobals(v,s,2,1,0);
+    setGlobals(v, s, 2, 1, 0);
     EXPECT_EXIT(zzz(11), testing::ExitedWithCode(1), "");
 
-    v[0] = 11; v[1] = 0.0001;
-    setGlobals(v,s,2,1,0);
+    v[0] = 11;
+    v[1] = 0.0001;
+    setGlobals(v, s, 2, 1, 0);
     EXPECT_EXIT(zzz(11), testing::ExitedWithCode(1), "");
 }

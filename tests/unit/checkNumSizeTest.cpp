@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-extern "C" 
+extern "C"
 {
-void checkNumSize(double num);
+    void checkNumSize(double num);
 }
 
 TEST(CheckNumSizeTests, inRange)
@@ -10,7 +10,6 @@ TEST(CheckNumSizeTests, inRange)
     EXPECT_NO_FATAL_FAILURE(checkNumSize(2000000000));
     EXPECT_NO_FATAL_FAILURE(checkNumSize(-2000000000));
 }
-
 
 TEST(CheckNumSizeTests, outRange)
 {
