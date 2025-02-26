@@ -1,5 +1,13 @@
 GTEST_DIR ?= googletest/googletest
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h $(GTEST_DIR)/include/gtest/internal/*.h
+PYTHON := python3
+PIP := pip3
+VENV_NAME := venv
+VENV_ACTIVATE := $(VENV_NAME)/bin/activate
+VENV_PYTHON := $(VENV_NAME)/bin/python
+VENV_PIP := $(VENV_NAME)/bin/pip
+PYTEST := $(VENV_NAME)/bin/pytest
+BUILD := build
 
 $(shell mkdir -p build/gtest)
 
@@ -7,6 +15,7 @@ all: build/app.exe build/unit-tests.exe
 
 clean:
 	rm -rf build
+	rm -rf $(VENV_NAME)
 
 # Run the normal C application
 run-int: build/app.exe
@@ -19,6 +28,30 @@ run-float: build/app.exe
 # Run all tests
 run-unit-tests: build/unit-tests.exe
 	build/unit-tests.exe
+
+# Create virtual environment if it doesn't exist
+venv: check-venv
+	@if [ ! -d "$(VENV_NAME)" ]; then \
+		echo "Creating virtual environment..."; \
+		$(PYTHON) -m venv $(VENV_NAME); \
+	fi
+
+run-integration-tests: build/app.exe install-deps
+	source $(VENV_NAME)/bin/activate; $(PYTEST) tests/integration/integrationTests.py
+
+# Check if venv module is available
+check-venv:
+	@$(PYTHON) -c "import venv" 2>/dev/null || (echo "python3-venv not found. Installing..." && sudo apt-get update && sudo apt-get install -y python3-venv)
+
+# Install dependencies in virtual environment
+install-deps: venv
+	@echo "Installing dependencies..."
+	@. $(VENV_ACTIVATE) && $(VENV_PIP) install --upgrade pip
+	@. $(VENV_ACTIVATE) && $(VENV_PIP) install pytest
+
+# Check if pytest is installed in virtual environment
+check-pytest: venv
+	@. $(VENV_ACTIVATE) && which pytest > /dev/null || (echo "pytest not found. Installing..." && $(VENV_PIP) install pytest)
 
 build/app.exe:
 	gcc src/main.c -o build/app.exe -Wall -Wextra -Wpedantic -Werror -std=c11

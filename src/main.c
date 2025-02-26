@@ -38,6 +38,7 @@ double division(double first, double second)
 
 void parser(char buffer[65536], int len)
 {
+    int brackets = 0;
     for (int i = 0; i < len; i++)
     {
         if (buffer[i] != ' ')
@@ -71,13 +72,32 @@ void parser(char buffer[65536], int len)
                 }
                 // printf("symbols[%d] = %d\n", sym, buffer[i]); //tests
                 symbols[sym] = buffer[i];
+                switch (symbols[sym])
+                {
+                case '(':
+                    {
+                        brackets++;
+                        break;
+                    }
+                case ')':
+                    {
+                        if (brackets > 0)
+                            brackets--;
+                        else
+                        {
+                            printf("brackets not correct! -> exit(9)\n");
+                            exit(9);
+                        }
+                        break;
+                    }
+                }
 
                 if (prev_symbol == 1 && symbols[sym] != '(' && symbols[sym - 1] != ')')
                 {
                     printf("two special symbols in a row! -> exit(7)\n");
                     exit(7);
                 }
-                if (prev_symbol != 0 && symbols[sym] == '-')
+                if (prev_symbol != 0 && symbols[sym] == '-' && symbols[sym - 1] != ')')
                 {
                     printf("no negative numbers! -> exit(6)\n");
                     exit(6);
@@ -98,16 +118,44 @@ void parser(char buffer[65536], int len)
             }
         }
     }
+    if (brackets != 0)
+    {
+        printf("brackets not correct! -> exit(9)\n");
+        exit(9);
+    }
 }
 
 double zzz(double result)
 {
     double res = result;
     char operation = symbols[current_sym];
+    int brackets = 0;
     if (operation == '(')
     {
         current_sym++;
-        return zzz(res);
+        brackets++;
+        while (current_sym < sym && current_val < val)
+        {
+            switch (symbols[current_sym])
+            {
+            case '(':
+                {
+                    brackets++;
+                    break;
+                }
+            case ')':
+                {
+                    brackets--;
+                    break;
+                }
+            }
+            if (brackets < 1)
+                return res;
+            res = zzz(res);
+            checkNumSize(res);
+            // printf(", result = %.4f\n", result); //tests
+        }
+        return res;
     }
     // printf ("first = %d, ", res);//test
     // printf ("operation = %d ", operation); //test
