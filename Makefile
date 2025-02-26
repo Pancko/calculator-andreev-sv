@@ -21,7 +21,7 @@ run-unit-tests: build/unit-tests.exe
 	build/unit-tests.exe
 
 build/app.exe:
-	gcc src/main.c -o build/app.exe
+	gcc src/main.c -o build/app.exe -Wall -Wextra -Wpedantic -Werror -std=c11
 
 build/app-test.o:
 	gcc -DGTEST -c src/main.c -o build/app-test.o

@@ -9,6 +9,9 @@ TEST(CheckNumSizeTests, inRange)
 {
     EXPECT_NO_FATAL_FAILURE(checkNumSize(2000000000));
     EXPECT_NO_FATAL_FAILURE(checkNumSize(-2000000000));
+    EXPECT_NO_FATAL_FAILURE(checkNumSize(0));
+    EXPECT_NO_FATAL_FAILURE(checkNumSize(15));
+    EXPECT_NO_FATAL_FAILURE(checkNumSize(-15));
 }
 
 TEST(CheckNumSizeTests, outRange)

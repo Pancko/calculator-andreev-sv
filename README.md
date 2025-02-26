@@ -15,7 +15,9 @@ This project is a simple calculator program written in C. It reads an arithmetic
 
 - Less than 1KiB of input data (else `UB` )
 
-- Only allowed charset [0-9()*+\\/\s\\.-] (else return code not equal to 0 )
+- End of input determined after reading `EOF`
+
+- Only allowed charset [0-9()*+\\/\s-] (else return code not equal to 0 )
 
 	- 0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
 	- ()\*+ matches a single character in the list ()*+ (case sensitive)

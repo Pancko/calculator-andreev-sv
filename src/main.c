@@ -36,7 +36,7 @@ double division(double first, double second)
         return (int)(first / second);
 }
 
-void parser(char buffer[65536], size_t len)
+void parser(char buffer[65536], int len)
 {
     for (int i = 0; i < len; i++)
     {
@@ -156,13 +156,14 @@ double zzz(double result)
     case '/':
         return division(res, second);
     }
+    return res;
 }
 
 #ifndef GTEST
 int main(int argc, char **argv)
 {
     char buffer[65536];
-    size_t len = 0;
+    int len = 0;
 
     for (int i = 0; i < argc; i++)
         if (strcmp(argv[i], "--float") == 0)
@@ -184,9 +185,9 @@ int main(int argc, char **argv)
         // printf(", result = %.4f\n", result); //tests
     }
     if (is_float == 1)
-        printf("%.4f", result);
+        printf("%.4f\n", result);
     else
-        printf("%.0f", result);
+        printf("%.0f\n", result);
     return 0;
 }
 #endif
