@@ -63,8 +63,8 @@ build/unit-tests.exe: build/gtest/gtest_main.a build/app-test.o
 	g++ -isystem $(GTEST_DIR)/include -pthread \
 		tests/unit/checkNumSizeTest.cpp \
 		tests/unit/divisionTest.cpp \
-		tests/unit/zzzTest.cpp \
 		tests/unit/parserTest.cpp \
+		tests/unit/calcsTest.cpp \
 		build/gtest/gtest_main.a build/app-test.o \
 		-o build/unit-tests.exe
 

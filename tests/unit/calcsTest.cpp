@@ -3,6 +3,7 @@
 
 extern "C"
 {
+    double evaluate_brackets(double init);
     double zzz(double result);
 }
 
@@ -56,4 +57,25 @@ TEST(zzzTests, badTests)
     v[1] = 0.0001;
     setGlobals(v, s, 2, 1, 0);
     EXPECT_EXIT(zzz(11), testing::ExitedWithCode(1), "");
+}
+
+TEST(bracketsTests, goodTests)
+{
+    int v1[] = {11, 3, 6};
+    char s1[] = {'(', '+', ')', '*'};
+    setGlobals(v1, s1, 3, 4, 0);
+    EXPECT_EQ(evaluate_brackets(11), 84);
+
+    int v2[] = {11, 2, 4, 5, 6};
+    char s2[] = {'(', '*', '-', '(', '+', '/', ')', ')'};
+    setGlobals(v2, s2, 5, 8, 1);
+    EXPECT_EQ(evaluate_brackets(11), 17.166666666666668);
+}
+
+TEST(bracketsTests, badTests)
+{
+    int v2[] = {11, 2, 4, 5, 0};
+    char s2[] = {'(', '*', '-', '(', '+', '/', ')', ')'};
+    setGlobals(v2, s2, 5, 8, 1);
+    EXPECT_EXIT(evaluate_brackets(11), testing::ExitedWithCode(1), "");
 }

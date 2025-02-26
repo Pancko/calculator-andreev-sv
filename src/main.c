@@ -125,86 +125,265 @@ void parser(char buffer[65536], int len)
     }
 }
 
-double zzz(double result)
+double evaluate_brackets(double res);
+double zzz(double init)
 {
-    double res = result;
-    char operation = symbols[current_sym];
-    int brackets = 0;
-    if (operation == '(')
+    double res = init;
+    while (current_sym < sym && current_val < val)
     {
-        current_sym++;
-        brackets++;
-        while (current_sym < sym && current_val < val)
+        char operation = symbols[current_sym];
+        if (operation == ')')
         {
-            switch (symbols[current_sym])
+            // printf("brres = %.4f\n", res);
+            return res;
+        }
+        if (operation == '(')
+        {
+            current_sym++;
+            res = evaluate_brackets(res);
+            operation = symbols[current_sym];
+        }
+        double second = values[current_val];
+        current_val++;
+        if (current_sym < sym && symbols[current_sym + 1] == '(')
+        {
+            current_sym += 2;
+            switch (operation)
             {
-            case '(':
+            case '*':
                 {
-                    brackets++;
+                    res *= evaluate_brackets(second);
                     break;
                 }
-            case ')':
+            case '/':
                 {
-                    brackets--;
+                    res = division(res, evaluate_brackets(second));
+                    break;
+                }
+            default:
+                {
+                    double brackets = evaluate_brackets(second);
+                    while (current_sym < sym && symbols[current_sym] != ')' &&
+                           (symbols[current_sym] == '*' || symbols[current_sym] == '/'))
+                    {
+                        char next_op = symbols[current_sym];
+                        current_sym++;
+                        if (next_op == '*')
+                        {
+                            if (symbols[current_sym] == '(')
+                            {
+                                current_sym++;
+                                brackets *= evaluate_brackets(values[current_val]);
+                            }
+                            else
+                            {
+                                brackets *= values[current_val];
+                                current_val++;
+                            }
+                        }
+                        else
+                        {
+                            if (symbols[current_sym] == '(')
+                            {
+                                current_sym++;
+                                brackets = division(brackets, evaluate_brackets(values[current_val]));
+                            }
+                            else
+                            {
+                                brackets = division(brackets, values[current_val]);
+                                current_val++;
+                            }
+                        }
+                    }
+
+                    if (operation == '+')
+                    {
+                        res += brackets;
+                    }
+                    else
+                    {
+                        res -= brackets;
+                    }
                     break;
                 }
             }
-            if (brackets < 1)
-                return res;
-            res = zzz(res);
-            checkNumSize(res);
-            // printf(", result = %.4f\n", result); //tests
         }
-        return res;
-    }
-    // printf ("first = %d, ", res);//test
-    // printf ("operation = %d ", operation); //test
-    double second = values[current_val];
-    // printf (",second = %d ", second);//test
-    current_val++;
-    if (operation == ')')
-    {
-        if (current_sym >= 1 && symbols[current_sym - 1] == '(')
-            return res;
-        current_sym++;
-        operation = symbols[current_sym];
-    }
-    if (current_sym < sym && symbols[current_sym + 1] == '(')
-    {
-        current_sym++;
-        switch (operation)
+        else
         {
-        case '+':
-            return res + zzz(second);
-        case '-':
-            return res - zzz(second);
-        case '*':
-            return res * zzz(second);
-        case '/':
-            return division(res, zzz(second));
+            current_sym++;
+            switch (operation)
+            {
+            case '+':
+                {
+                    if (symbols[current_sym] != '*' && symbols[current_sym] != '/')
+                        res += second;
+                    else
+                        res += zzz(second);
+                    break;
+                }
+            case '-':
+                {
+                    if (symbols[current_sym] != '*' && symbols[current_sym] != '/')
+                        res -= second;
+                    else
+                        res -= zzz(second);
+                    break;
+                }
+            case '*':
+                {
+                    res *= second;
+                    break;
+                }
+            case '/':
+                {
+                    res = division(res, second);
+                    break;
+                }
+            }
         }
     }
-    current_sym++;
-    switch (operation)
-    {
-    case '+':
-        {
-            if (symbols[current_sym] != '*' && symbols[current_sym] != '/')
-                return res + second;
-            return res + zzz(second);
-        }
-    case '-':
-        {
-            if (symbols[current_sym] != '*' && symbols[current_sym] != '/')
-                return res - second;
-            return res - zzz(second);
-        }
-    case '*':
-        return res * second;
-    case '/':
-        return division(res, second);
-    }
+    // printf("res = %.4f\n", res);
     return res;
+}
+
+double evaluate_brackets(double init)
+{
+    double result = init;
+
+    while (current_sym < sym && symbols[current_sym] != ')')
+    {
+        char op = symbols[current_sym];
+        current_sym++;
+        if (op == '(')
+        {
+            result = evaluate_brackets(result);
+        }
+        else if (current_sym < sym && symbols[current_sym] == '(')
+        {
+            double second = values[current_val];
+            current_val++;
+            current_sym++;
+            switch (op)
+            {
+            case '*':
+                {
+                    result *= evaluate_brackets(second);
+                    break;
+                }
+            case '/':
+                {
+                    result = division(result, evaluate_brackets(second));
+                    break;
+                }
+            default:
+                {
+                    double brackets = evaluate_brackets(second);
+                    while (current_sym < sym && symbols[current_sym] != ')' &&
+                           (symbols[current_sym] == '*' || symbols[current_sym] == '/'))
+                    {
+                        char next_op = symbols[current_sym];
+                        current_sym++;
+                        double new_val = values[current_val];
+                        current_val++;
+                        if (next_op == '*')
+                        {
+                            if (symbols[current_sym] == '(')
+                            {
+                                current_sym++;
+                                brackets *= evaluate_brackets(new_val);
+                            }
+                            else
+                            {
+                                brackets *= new_val;
+                            }
+                        }
+                        else
+                        {
+                            if (symbols[current_sym] == '(')
+                            {
+                                current_sym++;
+                                brackets = division(brackets, evaluate_brackets(new_val));
+                            }
+                            else
+                            {
+                                brackets = division(brackets, new_val);
+                            }
+                        }
+                    }
+
+                    if (op == '+')
+                    {
+                        // printf("%.4f + %.4f = ", result, brackets);
+                        result += brackets;
+                        // printf("%.4f\n", result);
+                    }
+                    else
+                    {
+                        // printf("%.4f - %.4f = ", result, brackets);
+                        result -= brackets;
+                        // printf("%.4f\n", result);
+                    }
+                    break;
+                }
+            }
+        }
+        else
+        {
+            double next_val = values[current_val];
+            current_val++;
+
+            switch (op)
+            {
+            case '*':
+                {
+                    result *= next_val;
+                    break;
+                }
+            case '/':
+                {
+                    result = division(result, next_val);
+                    break;
+                }
+            default:
+                {
+                    while (current_sym < sym && symbols[current_sym] != ')' &&
+                           (symbols[current_sym] == '*' || symbols[current_sym] == '/'))
+                    {
+                        char next_op = symbols[current_sym];
+                        current_sym++;
+                        if (next_op == '*')
+                        {
+                            next_val *= values[current_val];
+                        }
+                        else
+                        {
+                            next_val = division(next_val, values[current_val]);
+                        }
+                        current_val++;
+                    }
+
+                    if (op == '+')
+                    {
+                        result += next_val;
+                    }
+                    else
+                    {
+                        result -= next_val;
+                    }
+                    break;
+                }
+            }
+        }
+        checkNumSize(result);
+    }
+
+    if (current_sym < sym && symbols[current_sym] == ')')
+    {
+        current_sym++;
+    }
+
+    // printf("brackets res = %.4f\n", result);
+    return result;
 }
 
 #ifndef GTEST
@@ -226,12 +405,8 @@ int main(int argc, char **argv)
 
     double result = 0;
     result = values[0];
-    while (current_sym < sym && current_val < val)
-    {
-        result = zzz(result);
-        checkNumSize(result);
-        // printf(", result = %.4f\n", result); //tests
-    }
+    result = zzz(result);
+    checkNumSize(result);
     if (is_float == 1)
         printf("%.4f\n", result);
     else

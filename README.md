@@ -72,12 +72,13 @@ The program will prompt you to enter an arithmetic expression. After entering th
 ## Into the code-verse (how does it work)
 The program uses the concept of Reverse Polish Notation, including two stacks - `values` for numbers and `symbols` for arithmetic operations and round brackets. 
 
-- The program(`main.c`) consists of 4 functions:
+- The program(`main.c`) consists of 5 functions:
 
 	1. `checkNumSize` - checking input integers and intermediate results for following the restrictions (described in `Description` part).
 	2. `division` - handles the `/` operation for both real and integer modes, also checking for the second argument to be > |10<sup>-4</sup>|.
 	3. `parser` - parses the string and filling the `values` and `symbols` stacks.
 	4. `zzz` - main calculus function. It takes two numbers from `values` stack and uses next operation from `symbols`. It checks for brackets, operation order and applies different actions depending on it.
+    5. `evaluate_brackets` - evaluates anything in the next brackets `()`
 
 - `main()` covers everything else: 
 	- reading from `stdin` and calling `parser`,

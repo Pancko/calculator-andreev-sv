@@ -10,14 +10,44 @@ def test2():
     assert res.returncode == 0
     assert int(res.stdout) == 72312
 
-
 def test3():
+    res=subprocess.run(["build/app.exe"], input="5+(11*8)/4",text=True,capture_output=True)
+    assert res.returncode == 0
+    assert int(res.stdout) == 27
+
+def test_math1():
+    res=subprocess.run(["build/app.exe", "--float"], input="(125*2314-(231-(123*8)+(((16*8)-97)/12)))/3",text=True,capture_output=True)
+    assert res.returncode == 0
+    assert float(res.stdout) == 96666.8056
+
+
+def test_math1():
+    res=subprocess.run(["build/app.exe", "--float"], input="(125*2314-(231-(123*8)+(((16*8)-97)/12)*(2+1)))/3",text=True,capture_output=True)
+    assert res.returncode == 0
+    assert float(res.stdout) == 96665.0833
+
+def test_math2():
     res=subprocess.run(["build/app.exe", "--float"], input="  (  3 + 4 )  * 2", text=True,capture_output=True)
     assert res.returncode == 0
     assert float(res.stdout) == 14.0000
 
 
-def test4():
+def test_tab1():
     res=subprocess.run(["build/app.exe"], input="\t9\n-\n5",text=True,capture_output=True)
     assert res.returncode == 0
     assert int(res.stdout) == 4
+
+def test_tab2():
+    res=subprocess.run(["build/app.exe"], input="((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((2+1+(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((2*4)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))",text=True,capture_output=True)
+    assert res.returncode == 0
+    assert int(res.stdout) == 11
+
+def test_tab2():
+    res=subprocess.run(["build/app.exe", "--float"], input="((((((((((((((((((((((((((((((((((((((((((((((((((2+((((((((((((((((((((((\n(((((((((((((((((\f(((5+((((((((((((((((((((((((((((((((((((((((((((0+9+(((((((((\n(((((((((((((((((((((((((((((((((((((((((((\n((((((((((((((((((((((((((((((((((((((((((((((((((((((((2*3))))))))))))))))))))))))))))))))))))))))))))))))))))))))\f)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))\n)))))))))))))))))))))))))))))))))))))))))))))))))))))))\f))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))",text=True,capture_output=True)
+    assert res.returncode == 0
+    assert float(res.stdout) == 22.0000
+
+def test_tab3():
+    res=subprocess.run(["build/app.exe"], input="(2+1+((2*4)))",text=True,capture_output=True)
+    assert res.returncode == 0
+    assert int(res.stdout) == 11    
