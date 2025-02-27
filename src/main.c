@@ -128,6 +128,10 @@ void parser(char buffer[65536], int len)
         printf("brackets not correct! -> exit(9)\n");
         exit(9);
     }
+    if (prev_symbol == 1 && symbols[sym - 1] != ')')
+    {
+        exit(5);
+    }
 }
 
 double evaluate_brackets(double res);
@@ -173,30 +177,30 @@ double zzz(double init)
                     {
                         char next_op = symbols[current_sym];
                         current_sym++;
+                        int new_val = values[current_val];
+                        current_val++;
                         if (next_op == '*')
                         {
                             if (symbols[current_sym] == '(')
                             {
-                                current_sym++;
-                                brackets *= evaluate_brackets(values[current_val]);
+                                // current_sym++;
+                                brackets *= evaluate_brackets(new_val);
                             }
                             else
                             {
-                                brackets *= values[current_val];
-                                current_val++;
+                                brackets *= new_val;
                             }
                         }
                         else
                         {
                             if (symbols[current_sym] == '(')
                             {
-                                current_sym++;
-                                brackets = division(brackets, evaluate_brackets(values[current_val]));
+                                // current_sym++;
+                                brackets = division(brackets, evaluate_brackets(new_val));
                             }
                             else
                             {
-                                brackets = division(brackets, values[current_val]);
-                                current_val++;
+                                brackets = division(brackets, new_val);
                             }
                         }
                     }
@@ -403,7 +407,7 @@ int main(int argc, char **argv)
         else
             is_float = 0;
 
-    while (fgets(buffer + len, sizeof(buffer) - len, stdin))
+    while (fgets(buffer + len, sizeof(buffer) - len, stdin) != EOF)
         len += strlen(buffer + len);
 
     parser(buffer, len);

@@ -10,6 +10,9 @@ PYTEST := $(VENV_NAME)/bin/pytest
 BUILD := build
 
 $(shell mkdir -p build/gtest)
+$(shell git clone https://github.com/google/googletest &> /dev/null)
+
+.PHONY: all clean run-int run-float run-unit-test run-integration-tests venv
 
 all: build/app.exe build/unit-tests.exe
 
