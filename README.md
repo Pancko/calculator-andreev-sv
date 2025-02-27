@@ -5,9 +5,9 @@
 
 ## Description
 
-  
+This project is a simple calculator program written in C. It reads an arithmetic expression from standard input, parses it, and prints the result. 
 
-This project is a simple calculator program written in C. It reads an arithmetic expression from standard input, parses it, and prints the result. Program features and restrictions:
+### Program features and restrictions:
 
 - Input passed through ```stdin```
 
@@ -34,6 +34,8 @@ This project is a simple calculator program written in C. It reads an arithmetic
 
 - All intermediate results (for any allowed order of evaluation) are fit into range [-2\*10<sup>9</sup>...2*10<sup>9</sup>] (else `UB` )
 
+### The float flag
+
 - Supports flag `--float` that switch app calculations into real numbers mode
 
 - In integer mode:
@@ -50,11 +52,8 @@ This project is a simple calculator program written in C. It reads an arithmetic
 
 - In any mode division on a number less than 10 <sup>-4</sup> are forbidden (else UB)
 
-  
-
 ## Using the Program
 
-  
 To run the program in integer mode use
 ```bash 
 make run-int
