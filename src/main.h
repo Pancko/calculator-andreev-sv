@@ -1,4 +1,4 @@
-#define SIZE 1024
+#define SIZE 10000
 
 extern int val;
 extern int sym;

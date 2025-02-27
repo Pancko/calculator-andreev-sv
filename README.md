@@ -28,7 +28,7 @@ This project is a simple calculator program written in C. It reads an arithmetic
 
 	-  \\- matches the character - with index 45<sub>10</sub> (2D<sub>16</sub> or 55<sub>8</sub>)  literally (case sensitive)
 
-- Only correct arithmetic expression are allowed (else return code not equal to 0 )
+- Only correct arithmetic expression are allowed (else return code not equal to `0` )
 
 - All numbers in a given expression are integers from a range [0...2*10<sup>9</sup>] (else `UB` )
 
@@ -38,7 +38,7 @@ This project is a simple calculator program written in C. It reads an arithmetic
 
 - In integer mode:
 
-	- / return an integer part of an division (rounds towards 0)
+	- / return an integer part of an division (rounds towards `0`)
 
 	- Answer is given on a single line as an integer number (with - sign if negative)
 
