@@ -17,7 +17,7 @@ This project is a simple calculator program written in C. It reads an arithmetic
 
 - End of input determined after reading `EOF`
 
-- Only allowed charset [0-9()*+\\/\s-] (else return code not equal to 0 )
+- Only allowed charset [0-9()*+\\/\s-] (else return code not equal to `0` )
 
 	- 0-9 matches a single character in the range between 0 (index 48) and 9 (index 57) (case sensitive)
 	- ()\*+ matches a single character in the list ()*+ (case sensitive)
@@ -38,7 +38,7 @@ This project is a simple calculator program written in C. It reads an arithmetic
 
 - In integer mode:
 
-	- / return an integer part of an division (rounds towards -∞)
+	- / return an integer part of an division (rounds towards 0)
 
 	- Answer is given on a single line as an integer number (with - sign if negative)
 

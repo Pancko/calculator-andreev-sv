@@ -50,6 +50,11 @@ void parser(char buffer[65536], int len)
                     printf("too much integers -> exit(3)\n");
                     exit(3);
                 }
+                if (prev_symbol == 0)
+                {
+                    printf("no signs between two integers! -> exit(10)\n");
+                    exit(10);
+                }
                 values[val] = buffer[i] - '0';
                 int j = i + 1;
                 while (buffer[j] >= 48 && buffer[j] <= 57)

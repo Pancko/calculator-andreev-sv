@@ -88,4 +88,10 @@ TEST(ParserTests, badTests)
     }
     strcat(str, "\n");
     EXPECT_EXIT(parser(str, strlen(str)), testing::ExitedWithCode(3), "");
+
+    strcpy(str, "2 2 +\n");
+    EXPECT_EXIT(parser(str, strlen(str)), testing::ExitedWithCode(10), "");
+
+    strcpy(str, "2 +2)\n");
+    EXPECT_EXIT(parser(str, strlen(str)), testing::ExitedWithCode(9), "");
 }
