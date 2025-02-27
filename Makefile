@@ -41,7 +41,7 @@ run-integration-tests: build/app.exe install-deps
 
 # Check if venv module is available
 check-venv:
-	@$(PYTHON) -c "import venv" 2>/dev/null || (echo "python3-venv not found. Installing..." && sudo apt-get update && sudo apt-get install -y python3-venv)
+	@$(PYTHON) -c "import venv" 2>/dev/null || (echo "python3-venv not found. Installing..." && sudo apt update && sudo apt install -y python3-venv)
 
 # Install dependencies in virtual environment
 install-deps: venv
