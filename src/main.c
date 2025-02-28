@@ -407,7 +407,7 @@ int main(int argc, char **argv)
         else
             is_float = 0;
 
-    while (fgets(buffer + len, sizeof(buffer) - len, stdin) != EOF)
+    while (fgets(buffer + len, sizeof(buffer) - len, stdin))
         len += strlen(buffer + len);
 
     parser(buffer, len);
